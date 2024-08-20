@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ErrorOr" />
+    <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="SonarAnalyzer.CSharp">
@@ -17,6 +19,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ticky.Domain\Ticky.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Attendees\" />
+    <Folder Include="Commands\Discounts\" />
+    <Folder Include="Commands\Events\" />
+    <Folder Include="Commands\Tickets\" />
+    <Folder Include="Queries\Discounts\" />
+    <Folder Include="Queries\Attendees\" />
+    <Folder Include="Queries\Tickets\" />
   </ItemGroup>
 
 </Project>

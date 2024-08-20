@@ -1,3 +1,9 @@
-﻿namespace Ticky.Shared.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-public interface IInstaller { }
+namespace Ticky.Shared.Interfaces;
+
+public interface IInstaller
+{
+    void InstallService(IServiceCollection services, IConfiguration configuration);
+}

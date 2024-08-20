@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ticky.Application\Ticky.Application.csproj" />
     <ProjectReference Include="..\Ticky.Domain\Ticky.Domain.csproj" />
   </ItemGroup>
 

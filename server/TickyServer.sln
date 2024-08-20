@@ -3,18 +3,28 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticky.API", "Ticky.API\Ticky.API.csproj", "{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.API", "Ticky.API\Ticky.API.csproj", "{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticky.Application", "Ticky.Application\Ticky.Application.csproj", "{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Application", "Ticky.Application\Ticky.Application.csproj", "{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticky.Domain", "Ticky.Domain\Ticky.Domain.csproj", "{54D216FF-516D-4E9D-A67E-56159B8CB4A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Domain", "Ticky.Domain\Ticky.Domain.csproj", "{54D216FF-516D-4E9D-A67E-56159B8CB4A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticky.Infrastructure", "Ticky.Infrastructure\Ticky.Infrastructure.csproj", "{471DC42D-1471-4367-9793-840460B17DFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Infrastructure", "Ticky.Infrastructure\Ticky.Infrastructure.csproj", "{471DC42D-1471-4367-9793-840460B17DFD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{746A9144-3194-4570-8E60-BCE5A1777806}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Packages.props = Directory.Packages.props
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{75D0D459-15AC-46C8-8FBA-32D4D33F973B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9C74CFC5-DF08-4695-A65C-8964C1EE84DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Tests.Architecture", "Ticky.Tests.Architecture\Ticky.Tests.Architecture.csproj", "{57CC7B02-C08E-4E6D-A57D-B78DD351491C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Shared", "Ticky.Shared\Ticky.Shared.csproj", "{06851B31-806A-4C28-BFBC-C10DD13C5493}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +48,25 @@ Global
 		{471DC42D-1471-4367-9793-840460B17DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{471DC42D-1471-4367-9793-840460B17DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{471DC42D-1471-4367-9793-840460B17DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57CC7B02-C08E-4E6D-A57D-B78DD351491C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57CC7B02-C08E-4E6D-A57D-B78DD351491C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57CC7B02-C08E-4E6D-A57D-B78DD351491C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57CC7B02-C08E-4E6D-A57D-B78DD351491C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{97C3A76A-910B-4CAB-88E9-77FF41D5D73E} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
+		{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
+		{54D216FF-516D-4E9D-A67E-56159B8CB4A8} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
+		{471DC42D-1471-4367-9793-840460B17DFD} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
+		{57CC7B02-C08E-4E6D-A57D-B78DD351491C} = {9C74CFC5-DF08-4695-A65C-8964C1EE84DA}
+		{06851B31-806A-4C28-BFBC-C10DD13C5493} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6C8014B4-EBC8-4297-8A38-6B00944F15AF}

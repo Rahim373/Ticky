@@ -55,10 +55,9 @@ public class CreateEventCommandHnadler
             createdByUserId: userId.Value
         );
 
-        var createdEvent = await _eventRepository.CreateEventAsync(@event, cancellationToken);
+        await _eventRepository.CreateEventAsync(@event, cancellationToken);
         await _unitOfWork.CommitChangesAsync();
 
-        return createdEvent;
-
+        return @event;
     }
 }

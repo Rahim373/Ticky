@@ -29,5 +29,6 @@ public class Event : BaseEntity
         EventStatus = status;
         CreatedOn = DateTime.UtcNow;
         UpdatedOn = DateTime.UtcNow;
+        CreatedByUserId = createdByUserId;
     }
 }

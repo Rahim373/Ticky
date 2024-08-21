@@ -12,9 +12,10 @@ internal class EventRepository : IEventRepository
         this._context = context;
     }
 
-    public Task<Event> CreateEventAsync(Event @event, CancellationToken cancellationToken = default)
+    public Task CreateEventAsync(Event @event, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        _context.Events.AddAsync(@event);
+        return Task.CompletedTask;
     }
 
     public ValueTask<Event?> GetEventAsync(Guid id, CancellationToken cancellationToken = default)

@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using System.Reflection;
+﻿using System.Reflection;
+using Ticky.API.Common;
+using Ticky.API.Middlewares;
+using Ticky.Application.Common.Interfaces;
 
 namespace Ticky.API;
 
@@ -23,6 +25,12 @@ public static class DependencyInjection
             options.EnableAnnotations();
         });
 
+        services.AddProblemDetails();
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserContext, UserContext>();
+
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
         return services;
     }
 
@@ -40,5 +48,6 @@ public static class DependencyInjection
         app.UseAuthorization();
 
         app.MapControllers();
+        app.UseExceptionHandler();
     }
 }

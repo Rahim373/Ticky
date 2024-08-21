@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Ticky.Application.Commands.Events;
 using Ticky.Application.Queries.Events;
 using Ticky.Domain.Entities;
 
@@ -17,11 +18,6 @@ public class EventsController : BaseApiController
 
     #region Events
 
-    /// <summary>
-    /// Returns list of the events
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     [HttpGet]
     [Tags("Events")]
     public Task<IActionResult> GetEventAsync()
@@ -47,9 +43,10 @@ public class EventsController : BaseApiController
 
     [HttpPost]
     [Tags("Events")]
-    public Task<IActionResult> CreateEventAsync(Guid eventId)
+    public async Task<IActionResult> CreateEventAsync(CreateEventCommand command)
     {
-        throw new NotImplementedException();
+        var response = await _sender.Send(command);
+        return response.Match(x => Ok(), Problem);
     }
 
     [HttpPut("{eventId:guid}")]

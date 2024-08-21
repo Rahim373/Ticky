@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Ticky.Application.Entities;
 
 namespace Ticky.Domain.Entities;
 

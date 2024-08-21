@@ -1,4 +1,4 @@
-﻿using Ticky.Application.Interfaces.Persistence.Repositories;
+﻿using Ticky.Application.Common.Interfaces;
 using Ticky.Domain.Entities;
 
 namespace Ticky.Infrastructure.Persistence.Repositories;

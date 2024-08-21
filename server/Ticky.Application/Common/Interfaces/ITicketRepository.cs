@@ -1,6 +1,6 @@
 ﻿using Ticky.Domain.Entities;
 
-namespace Ticky.Application.Interfaces.Persistence.Repositories;
+namespace Ticky.Application.Common.Interfaces;
 
 public interface ITicketRepository
 {

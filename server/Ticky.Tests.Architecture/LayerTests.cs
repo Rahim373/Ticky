@@ -1,6 +1,5 @@
 using FluentAssertions;
 using NetArchTest.Rules;
-using Ticky.Application;
 using Ticky.Domain;
 
 namespace Ticky.Tests.Architecture;

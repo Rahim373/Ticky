@@ -1,34 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ErrorOr" />
-    <PackageReference Include="MediatR" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="SonarAnalyzer.CSharp">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+        <PackageReference Include="ErrorOr" />
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="SonarAnalyzer.CSharp">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Ticky.Domain\Ticky.Domain.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Ticky.Domain\Ticky.Domain.csproj" />
+        <ProjectReference Include="..\Ticky.Shared\Ticky.Shared.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\Attendees\" />
-    <Folder Include="Commands\Discounts\" />
-    <Folder Include="Commands\Events\" />
-    <Folder Include="Commands\Tickets\" />
-    <Folder Include="Queries\Discounts\" />
-    <Folder Include="Queries\Attendees\" />
-    <Folder Include="Queries\Tickets\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Commands\Attendees\" />
+        <Folder Include="Commands\Discounts\" />
+        <Folder Include="Commands\Tickets\" />
+        <Folder Include="Queries\Discounts\" />
+        <Folder Include="Queries\Attendees\" />
+        <Folder Include="Queries\Tickets\" />
+    </ItemGroup>
 
 </Project>

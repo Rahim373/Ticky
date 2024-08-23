@@ -12,6 +12,11 @@ public class EventMapping : IEntityTypeConfiguration<Event>
 
         builder.HasKey(t => t.Id);
 
+        builder.HasOne(t => t.Organization)
+            .WithMany(t => t.Events)
+            .HasForeignKey(t => t.OrganizationId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(t => t.CreatedByUser)
             .WithMany(e => e.CreatedEvents)
             .IsRequired()

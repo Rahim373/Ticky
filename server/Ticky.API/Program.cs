@@ -12,5 +12,7 @@ builder.Services
     .AddApplication(configuration);
 
 var app = builder.Build();
-app.UsePresentation();
+app.UsePresentation()
+    .UseInfrastructure();
+
 app.Run();

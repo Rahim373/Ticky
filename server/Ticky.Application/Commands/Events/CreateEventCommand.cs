@@ -45,7 +45,7 @@ public class CreateEventCommandHnadler
 
         if (userId is null)
         {
-            return ErrorOr.Error.Unauthorized("Invalid user id");
+            return Error.Unauthorized("Invalid user id");
         }
 
         var @event = new Event(

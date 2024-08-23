@@ -34,7 +34,7 @@ public static class DependencyInjection
         return services;
     }
 
-    public static void UsePresentation(this WebApplication app)
+    public static WebApplication UsePresentation(this WebApplication app)
     {
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -49,5 +49,7 @@ public static class DependencyInjection
 
         app.MapControllers();
         app.UseExceptionHandler();
+
+        return app;
     }
 }

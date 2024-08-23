@@ -10,13 +10,15 @@ public class Event : BaseEntity
     public DateTime CreatedOn { get; set; }
     public DateTime UpdatedOn { get; set; } = DateTime.Now;
     public EventStatus EventStatus { get; set; }
+    public Guid OrganizationId { get; set; }
 
     #region Virtual properties
-    
+
     public virtual ICollection<Ticket> Tickets { get; set; }
     public virtual ICollection<EventOwner> Owners { get; set; }
     public virtual ICollection<EventAttendee> Attendees { get; set; }
     public virtual ApplicationUser CreatedByUser { get; set; }
+    public virtual Organization Organization { get; set; }
 
     #endregion
 

@@ -12,7 +12,7 @@ public class LayerTests
         // Act
         var result = Types.InAssembly(DomainAssembly.Assembly)
             .Should()
-            .NotHaveDependencyOnAll("Ticky.Api", "Ticky.Application", "Ticky.Infrastructure")
+            .NotHaveDependencyOnAll("Ticky.API.Admin", "Ticky.Application", "Ticky.Infrastructure")
             .GetResult();
 
         // Assert

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ticky.API\Ticky.API.csproj" />
+    <ProjectReference Include="..\Ticky.API.Admin\Ticky.API.Admin.csproj" />
     <ProjectReference Include="..\Ticky.Application\Ticky.Application.csproj" />
     <ProjectReference Include="..\Ticky.Domain\Ticky.Domain.csproj" />
     <ProjectReference Include="..\Ticky.Infrastructure\Ticky.Infrastructure.csproj" />

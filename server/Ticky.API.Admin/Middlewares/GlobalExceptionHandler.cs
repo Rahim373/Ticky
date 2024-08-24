@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ticky.API.Middlewares;
+namespace Ticky.API.Admin.Middlewares;
 
 public sealed class GlobalExceptionHandler : IExceptionHandler
 {

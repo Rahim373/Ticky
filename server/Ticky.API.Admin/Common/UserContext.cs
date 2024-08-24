@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Ticky.Application.Common.Interfaces;
 
-namespace Ticky.API.Common;
+namespace Ticky.API.Admin.Common;
 
 public class UserContext(IHttpContextAccessor _httpContext) : IUserContext
 {

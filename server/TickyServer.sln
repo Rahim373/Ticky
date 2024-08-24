@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.API", "Ticky.API\Ticky.API.csproj", "{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Application", "Ticky.Application\Ticky.Application.csproj", "{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Domain", "Ticky.Domain\Ticky.Domain.csproj", "{54D216FF-516D-4E9D-A67E-56159B8CB4A8}"
@@ -26,16 +24,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Tests.Architecture", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.Shared", "Ticky.Shared\Ticky.Shared.csproj", "{06851B31-806A-4C28-BFBC-C10DD13C5493}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ticky.API.Admin", "Ticky.API.Admin\Ticky.API.Admin.csproj", "{65202574-9255-489F-822A-DF55296A4AAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97C3A76A-910B-4CAB-88E9-77FF41D5D73E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,17 +52,21 @@ Global
 		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06851B31-806A-4C28-BFBC-C10DD13C5493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65202574-9255-489F-822A-DF55296A4AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65202574-9255-489F-822A-DF55296A4AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65202574-9255-489F-822A-DF55296A4AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65202574-9255-489F-822A-DF55296A4AAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{97C3A76A-910B-4CAB-88E9-77FF41D5D73E} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
 		{43DFBFD7-1DB6-4273-BEFD-48D5B9298DC4} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
 		{54D216FF-516D-4E9D-A67E-56159B8CB4A8} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
 		{471DC42D-1471-4367-9793-840460B17DFD} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
 		{57CC7B02-C08E-4E6D-A57D-B78DD351491C} = {9C74CFC5-DF08-4695-A65C-8964C1EE84DA}
 		{06851B31-806A-4C28-BFBC-C10DD13C5493} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
+		{65202574-9255-489F-822A-DF55296A4AAD} = {75D0D459-15AC-46C8-8FBA-32D4D33F973B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6C8014B4-EBC8-4297-8A38-6B00944F15AF}

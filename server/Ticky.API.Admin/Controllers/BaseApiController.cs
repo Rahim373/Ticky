@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Ticky.API.Controllers;
+namespace Ticky.API.Admin.Controllers;
 
 [ApiController]
 [Produces("application/json")]

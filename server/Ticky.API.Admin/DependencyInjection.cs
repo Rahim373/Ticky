@@ -1,12 +1,15 @@
 ﻿using System.Reflection;
-using Ticky.API.Common;
-using Ticky.API.Middlewares;
+using Ticky.API.Admin.Common;
+using Ticky.API.Admin.Middlewares;
 using Ticky.Application.Common.Interfaces;
+using Ticky.Shared.Settings;
 
-namespace Ticky.API;
+namespace Ticky.API.Admin;
 
 public static class DependencyInjection
 {
+    private static string DefaultCorsPolicy = "DefaultCorsPolicy";
+
     public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers();
@@ -31,6 +34,21 @@ public static class DependencyInjection
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
 
+        services.AddCors(options =>
+        {
+            var origins = configuration.Get<ApplicationOptions>()?.CorsOrigins;
+
+            if (origins is not null)
+            {
+                options.AddPolicy(DefaultCorsPolicy, policy =>
+                {
+                    policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins(origins);
+                });
+            }
+        });
+
         return services;
     }
 
@@ -42,6 +60,8 @@ public static class DependencyInjection
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseCors(DefaultCorsPolicy);
 
         app.UseHttpsRedirection();
 

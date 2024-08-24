@@ -1,4 +1,4 @@
-using Ticky.API;
+using Ticky.API.Admin;
 using Ticky.Application;
 using Ticky.Infrastructure;
 

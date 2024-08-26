@@ -50,9 +50,10 @@ public class GetTokenCommandHandler : ITickyRequestHandler<GetTokenCommand, Toke
         }
 
         var user = await _userRepository.GetUserByEmailAsync(request.Email);
+        var roles = await _signInManager.UserManager.GetRolesAsync(user);
 
         var refreshToken = await _authService.GenerateRefreshTokenAsync(cancellationToken);
-        var (accessToken, expiryDate) = await _authService.GenerateAccessTokenAsync(user!.Id, user!.Email, cancellationToken);
+        var (accessToken, expiryDate) = await _authService.GenerateAccessTokenAsync(user, roles, cancellationToken);
 
         var response = new TokenResponse(user.Id, user.Email, accessToken, refreshToken, expiryDate);
         return await Task.FromResult(response);

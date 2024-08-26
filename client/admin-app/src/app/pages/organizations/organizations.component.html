@@ -1,0 +1,29 @@
+<nz-table
+      nzShowSizeChanger
+      [nzData]="organizations"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageNumber"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th nzColumnKey="name" [nzSortFn]="true">Org Name</th>
+          <th nzColumnKey="owner.email" [nzSortFn]="true">Owner</th>
+          <th nzColumnKey="createdOn">Created On</th>
+          <th nzColumnKey="isActive" [nzSortFn]="true">Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of organizations; track data) {
+          <tr>
+            <td>{{ data.name }}</td>
+            <td>{{ data.owner.email }}</td>
+            <td>{{ data.createdOn | date }}</td>
+            <td>{{ data.isActive }}</td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>

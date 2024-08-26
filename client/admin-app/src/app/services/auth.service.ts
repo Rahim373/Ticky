@@ -10,19 +10,24 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-
+  
   private Token_Key: string = "token";
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
   login(request: LoginRequest): void {
-    this.httpClient.post<TokenResponse | ErrorResponse>(ApiRoutes.getToken, request).
+    this.httpClient.post<TokenResponse | ErrorResponse>(ApiRoutes.Auth.Token, request).
       subscribe((response: any) => {
         if (response.accessToken) {
           this.storeToken(response);
-          this.router.navigate(["/dashboard"]);
+          this.router.navigate(["app"]);
         }
       });
+  }
+
+  getAccessToken() : string | null {
+    const token = this.retrieveToken();
+    return token?.accessToken ?? null;
   }
 
   isLoggedIn(): boolean {
@@ -45,5 +50,14 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+  logout() {
+    this.removeToken();
+  }
+
+  private removeToken(): void {
+    localStorage.clear();
+    this.router.navigate(['login']);
   }
 }

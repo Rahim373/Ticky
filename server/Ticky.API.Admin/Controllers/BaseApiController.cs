@@ -1,12 +1,15 @@
 ﻿using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Ticky.Domain.Constants;
 
 namespace Ticky.API.Admin.Controllers;
 
 [ApiController]
 [Produces("application/json")]
 [Route("[controller]")]
+[Authorize(Roles = Role.MANAGERS)]
 public class BaseApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)

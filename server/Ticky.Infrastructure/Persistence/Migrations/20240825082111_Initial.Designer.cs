@@ -12,7 +12,7 @@ using Ticky.Infrastructure.Persistence;
 namespace Ticky.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240820121457_Initial")]
+    [Migration("20240825082111_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -126,31 +126,6 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Ticky.Application.Entities.EventOwner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("OwnerShipType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("EventId", "UserId", "OwnerShipType")
-                        .IsUnique();
-
-                    b.ToTable("EventOwners", (string)null);
                 });
 
             modelBuilder.Entity("Ticky.Domain.Entities.ApplicationRole", b =>
@@ -332,12 +307,17 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Events", (string)null);
                 });
@@ -365,6 +345,95 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("EventAttendees", (string)null);
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.EventOwner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OwnerShipType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("EventId", "UserId", "OwnerShipType")
+                        .IsUnique();
+
+                    b.ToTable("EventOwners", (string)null);
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.Organization", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("OwnerId")
+                        .IsUnique();
+
+                    b.ToTable("Organizations", (string)null);
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.OrganizationMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("UserId", "OrganizationId")
+                        .IsUnique();
+
+                    b.ToTable("OrganizationMembers", (string)null);
                 });
 
             modelBuilder.Entity("Ticky.Domain.Entities.Ticket", b =>
@@ -456,25 +525,6 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ticky.Application.Entities.EventOwner", b =>
-                {
-                    b.HasOne("Ticky.Domain.Entities.Event", "Event")
-                        .WithMany("Owners")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Ticky.Domain.Entities.ApplicationUser", "User")
-                        .WithMany("AccessibleEvents")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Ticky.Domain.Entities.DiscountedTicket", b =>
                 {
                     b.HasOne("Ticky.Domain.Entities.Discount", "Discount")
@@ -502,7 +552,15 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Ticky.Domain.Entities.Organization", "Organization")
+                        .WithMany("Events")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("CreatedByUser");
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Ticky.Domain.Entities.EventAttendee", b =>
@@ -524,6 +582,55 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Ticky.Domain.Entities.EventOwner", b =>
+                {
+                    b.HasOne("Ticky.Domain.Entities.Event", "Event")
+                        .WithMany("Owners")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ticky.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("AccessibleEvents")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.Organization", b =>
+                {
+                    b.HasOne("Ticky.Domain.Entities.ApplicationUser", "Owner")
+                        .WithOne("Organization")
+                        .HasForeignKey("Ticky.Domain.Entities.Organization", "OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.OrganizationMember", b =>
+                {
+                    b.HasOne("Ticky.Domain.Entities.Organization", "Organization")
+                        .WithMany("OrganizationMembers")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ticky.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("AccessibleOrganizations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ticky.Domain.Entities.Ticket", b =>
                 {
                     b.HasOne("Ticky.Domain.Entities.Event", "Event")
@@ -539,7 +646,12 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("AccessibleEvents");
 
+                    b.Navigation("AccessibleOrganizations");
+
                     b.Navigation("CreatedEvents");
+
+                    b.Navigation("Organization")
+                        .IsRequired();
 
                     b.Navigation("Participations");
                 });
@@ -556,6 +668,13 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                     b.Navigation("Owners");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.Organization", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("OrganizationMembers");
                 });
 
             modelBuilder.Entity("Ticky.Domain.Entities.Ticket", b =>

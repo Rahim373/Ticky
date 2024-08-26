@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Ticky.Application.Common.Interfaces;
 using Ticky.Domain.Constants;
 using Ticky.Domain.Entities;
 using Ticky.Shared.Settings;
@@ -14,20 +12,17 @@ public class DbMigrationService
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly IConfiguration _configuration;
     private readonly ApplicationOptions _appOptions;
 
     public DbMigrationService(
         ApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
-        IOptions<ApplicationOptions> options,
-        IConfiguration configuration)
+        IOptions<ApplicationOptions> options)
     {
         _context = context;
         _userManager = userManager;
         _roleManager = roleManager;
-        _configuration = configuration;
         _appOptions = options.Value;
     }
 

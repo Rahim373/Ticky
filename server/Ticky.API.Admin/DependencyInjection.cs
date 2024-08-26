@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Microsoft.OpenApi.Models;
+using System.Reflection;
 using Ticky.API.Admin.Common;
 using Ticky.API.Admin.Middlewares;
 using Ticky.Application.Common.Interfaces;
@@ -21,11 +22,35 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            // using System.Reflection;
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
             options.EnableAnnotations();
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter JWT token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
         });
 
         services.AddProblemDetails();
@@ -44,6 +69,8 @@ public static class DependencyInjection
                 {
                     policy.AllowAnyHeader()
                     .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("Authorization")
                     .WithOrigins(origins);
                 });
             }
@@ -62,9 +89,9 @@ public static class DependencyInjection
         }
 
         app.UseCors(DefaultCorsPolicy);
-
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

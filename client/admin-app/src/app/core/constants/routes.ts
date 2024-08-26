@@ -1,7 +1,12 @@
 import { environment } from '../../../environments/environment';
 
 export const ApiRoutes = {
-    getToken: `${environment.API_BASEURL}/token`
+    Auth: {
+        Token: `${environment.API_BASEURL}/token`
+    },
+    Organizations: {
+        GetOrganizationList: `${environment.API_BASEURL}/organizations/list`
+    }
 }
 
 export const ApplicationRoutes = {

@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Ticky.Application.Common.Interfaces;
+using Ticky.Domain.Entities;
 using Ticky.Shared.Settings;
 
 namespace Ticky.Infrastructure.Services;
@@ -23,7 +24,7 @@ internal class AuthService : IAuthService
         return Task.FromResult(token);
     }
 
-    public async Task<(string AccessToken, DateTime ExpirationDate)> GenerateAccessTokenAsync(Guid userId, string email, CancellationToken cancellationToken = default)
+    public async Task<(string AccessToken, DateTime ExpirationDate)> GenerateAccessTokenAsync(ApplicationUser user, IList<string>? roles, CancellationToken cancellationToken = default)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Secret));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -32,20 +33,32 @@ internal class AuthService : IAuthService
         var expireDate = now.AddMinutes(_jwtConfig.AccessTokenExpiryTimeMins);
 
 
-        var claims = new[]
+        List<Claim> claims = [
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new Claim(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
+
+        ];
+
+        if (roles is not null)
         {
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+        }
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = expireDate,
+            Issuer = _jwtConfig.Issuer,
+            Audience = _jwtConfig.Audience,
+            SigningCredentials = credentials
         };
 
-        var jwtSecurityToken = new JwtSecurityToken(
-            issuer: _jwtConfig.Issuer,
-            audience: _jwtConfig.Audience,
-            claims: claims,
-            expires: expireDate,
-            signingCredentials: credentials
-        );
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
-        return await Task.FromResult((new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken), expireDate));
+        return await Task.FromResult((tokenHandler.WriteToken(token), expireDate));
     }
 }

@@ -13,6 +13,13 @@ public class OrganizationRepository : IOrganizationRepository
         _context = context;
     }
 
+    public Task<Organization?> GetOrganizationByEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        return _context.Organizations
+            .Where(x => x.Owner.Email == email)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<(int Total, List<Organization> Items)> GetOrganizationsAsync(int take, int skip, CancellationToken cancellationToken = default)
     {
         var query = _context.Organizations;

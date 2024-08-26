@@ -16,6 +16,7 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Extends = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -66,6 +67,39 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Discounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailJobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    To = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    SentOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailJobs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RegistrationInvitations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrganizationInvite = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiresOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RegistrationInvitations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -414,6 +448,11 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmailJobs_To",
+                table: "EmailJobs",
+                column: "To");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EventAttendees_EventId_UserId",
                 table: "EventAttendees",
                 columns: new[] { "EventId", "UserId" },
@@ -496,6 +535,9 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                 name: "DiscountedTickets");
 
             migrationBuilder.DropTable(
+                name: "EmailJobs");
+
+            migrationBuilder.DropTable(
                 name: "EventAttendees");
 
             migrationBuilder.DropTable(
@@ -503,6 +545,9 @@ namespace Ticky.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrganizationMembers");
+
+            migrationBuilder.DropTable(
+                name: "RegistrationInvitations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

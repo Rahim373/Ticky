@@ -60,6 +60,8 @@ public static class DependencyInjection
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IEmailJobRepository, EmailJobRepository>();
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }

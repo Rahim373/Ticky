@@ -12,7 +12,7 @@ using Ticky.Infrastructure.Persistence;
 namespace Ticky.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240825082111_Initial")]
+    [Migration("20240826150640_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -137,6 +137,9 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("Extends")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -282,6 +285,37 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("DiscountedTickets", (string)null);
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.EmailJob", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("SentOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("To");
+
+                    b.ToTable("EmailJobs", (string)null);
                 });
 
             modelBuilder.Entity("Ticky.Domain.Entities.Event", b =>
@@ -434,6 +468,37 @@ namespace Ticky.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("OrganizationMembers", (string)null);
+                });
+
+            modelBuilder.Entity("Ticky.Domain.Entities.RegistrationInvitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("OrganizationInvite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegistrationInvitations", (string)null);
                 });
 
             modelBuilder.Entity("Ticky.Domain.Entities.Ticket", b =>

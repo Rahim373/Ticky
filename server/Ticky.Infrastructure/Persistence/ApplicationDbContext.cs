@@ -18,6 +18,9 @@ public class ApplicationDbContext :
     public DbSet<DiscountedTicket> DiscountedTickets { get; set; }
     public DbSet<Organization> Organizations { get; set; }
     public DbSet<OrganizationMember> OrganizationMembers { get; set; }
+    public DbSet<RegistrationInvitation> RegistrationInvitations { get; set; }
+    public DbSet<EmailJob> EmailJobs { get; set; }
+
 
     public async Task CommitChangesAsync()
     {

@@ -14,6 +14,11 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public Task<List<ApplicationRole>> GetAllRolesAsync(CancellationToken cancellationToken = default)
+    {
+        return _context.Roles.ToListAsync(cancellationToken);
+    }
+
     public async ValueTask<ApplicationUser?> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(email))

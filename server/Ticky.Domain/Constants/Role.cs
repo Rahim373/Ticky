@@ -1,9 +1,10 @@
 ﻿namespace Ticky.Domain.Constants;
 
-public sealed class Role
+public static class Role
 {
     public const string ADMIN = "Admin";
     public const string ORG_OWNER = "OrgOwner";
+    public const string USER = "User";
 
     /// <summary>
     /// Only used for controller auth

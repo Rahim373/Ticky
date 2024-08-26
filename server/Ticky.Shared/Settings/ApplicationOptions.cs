@@ -6,9 +6,16 @@ public class ApplicationOptions
     public string AllowedHosts { get; set; }
     public Connectionstrings ConnectionStrings { get; set; }
     public bool AutoMigration { get; set; }
-    public Adminuser AdminUser { get; set; }
+    public DemoUser[] SeedUsers { get; set; }
     public Jwtconfig JwtConfig { get; set; }
     public string[] CorsOrigins { get; set; } = []; 
+}
+
+public class DemoUser
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string[] Roles { get; set; }
 }
 
 public class Logging

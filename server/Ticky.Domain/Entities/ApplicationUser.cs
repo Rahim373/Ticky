@@ -4,6 +4,8 @@ namespace Ticky.Domain.Entities;
 
 public class ApplicationUser : IdentityUser<Guid>
 {
+    public bool PendingOrgCreation { get; set; }
+
     #region Virtual properties
     
     public virtual ICollection<Event> CreatedEvents { get; set; }

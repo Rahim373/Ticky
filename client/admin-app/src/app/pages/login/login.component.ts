@@ -15,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
+  loginLoading: boolean = false;  
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
 
@@ -24,12 +25,16 @@ export class LoginComponent {
     remember: [true]
   });
 
-  submitForm(): void {
+  async submitForm() {
     if (this.loginForm.valid) {
-      this.authService.login({
+      this.loginLoading = true;
+      await this.authService.login({
         email: this.loginForm.value.email!,
         password: this.loginForm.value.password!
       });
+
+      this.loginLoading = false;
+
     } else {
       Object.values(this.loginForm.controls).forEach(control => {
         if (control.invalid) {
@@ -39,6 +44,4 @@ export class LoginComponent {
       });
     }
   }
-
-
 }

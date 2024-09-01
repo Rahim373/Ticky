@@ -25,9 +25,9 @@ namespace Ticky.API.Admin.Controllers
             return response.Match(data => new OkObjectResult(data), Problem);
         }
 
-        [HttpPost("register-invitation")]
+        [HttpPost("invitations")]
         [Authorize(Roles = Role.ADMIN)]
-        public async Task<IActionResult> InviteToCreateOrganizationAsync(InviteOrganizationCommand command)
+        public async Task<IActionResult> CreateInvitation(InviteOrganizationCommand command)
         {
             var response = await _sender.Send(command);
             return response.Match((data) => Ok(), Problem);

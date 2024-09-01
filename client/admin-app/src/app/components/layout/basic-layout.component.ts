@@ -11,7 +11,7 @@ import { ContainerHeaderComponent } from "./container-header";
   selector: 'app-basic-layout',
   standalone: true,
   imports: [RouterOutlet, NzLayoutComponent, NzHeaderComponent, NzSiderComponent, NzDividerComponent,
-    NzContentComponent, NzFooterComponent, SidebarMenuComponent, NzBreadCrumbComponent, ContainerHeaderComponent],
+    NzContentComponent, NzFooterComponent, SidebarMenuComponent, NzBreadCrumbComponent],
   template: `
   <nz-layout>
       <nz-header nzTheme="light">
@@ -22,7 +22,6 @@ import { ContainerHeaderComponent } from "./container-header";
           <app-sidebar-menu></app-sidebar-menu>
         </nz-sider>
         <nz-content class="p-10 h-[calc(100vh-4rem)]">
-          <app-container-header></app-container-header>
           <router-outlet></router-outlet>
         </nz-content>
       </nz-layout>

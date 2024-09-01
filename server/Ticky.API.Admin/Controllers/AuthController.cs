@@ -32,9 +32,9 @@ public class AuthController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AcceptInvitation([FromQuery]string token)
+    public async Task<IActionResult> AcceptInvitation(AcceptInvitationCommand command)
     {
-        var response = await _sender.Send(new AcceptInvitationCommand(token));
+        var response = await _sender.Send(command);
         return response.Match((data) => Ok(), Problem);
     }
 }

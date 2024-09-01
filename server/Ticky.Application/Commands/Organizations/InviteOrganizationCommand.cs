@@ -1,12 +1,11 @@
 ﻿using ErrorOr;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using Ticky.Application.Common.Interfaces;
 using Ticky.Domain.Entities;
 
 namespace Ticky.Application.Commands.Organizations;
 
-public record InviteOrganizationCommand(string Email) : ITickyRequest<bool>;
+public record InviteOrganizationCommand(string Email, bool InviteOrgOnwer) : ITickyRequest<bool>;
 
 public class InviteOrganizationCommandValidator : AbstractValidator<InviteOrganizationCommand>
 {
@@ -31,7 +30,7 @@ public class InviteOrganizationCommandHandler : ITickyRequestHandler<InviteOrgan
         IOrganizationRepository organizationRepository,
         IUserRepository userRepository,
         IEmailJobRepository emailJobRepository,
-        IEmailService emailService, 
+        IEmailService emailService,
         IUnitOfWork unitOfWork)
     {
         _organizationRepository = organizationRepository;
@@ -47,7 +46,12 @@ public class InviteOrganizationCommandHandler : ITickyRequestHandler<InviteOrgan
 
         var user = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
 
-        if (user is not null)
+        if (user is not null && !request.InviteOrgOnwer)
+        {
+            return Error.Conflict(description: "This user is already in the system.");
+        }
+
+        if (user is not null && request.InviteOrgOnwer)
         {
             var organization = await _organizationRepository.GetOrganizationByEmailAsync(email, cancellationToken);
 
@@ -55,13 +59,15 @@ public class InviteOrganizationCommandHandler : ITickyRequestHandler<InviteOrgan
             {
                 if (!organization.IsActive)
                 {
-                    return Error.Conflict(description: "An inactive organization is already created with this email.");
+                    return Error.Conflict(description: "This email is already an owner of an inactive organization.");
                 }
 
-                return Error.Validation(description: "An organization is already created with this email.");
+                return Error.Validation(description: "This email already owns an organization.");
             }
 
-            return Error.Conflict(description: "User already have an account without an organization");
+            await _userRepository.UpdateUserAsync(user.Id, 
+                x => x.SetProperty(y => y.PendingOrgCreation, true)
+                , cancellationToken);
         }
 
         var expiresOn = DateTime.UtcNow.AddHours(48);
@@ -69,14 +75,13 @@ public class InviteOrganizationCommandHandler : ITickyRequestHandler<InviteOrgan
         var body = _emailService.GenerateRegisterInvitationEmail(email, token);
 
         var emailJob = new EmailJob(email, body);
-        emailJob.MarkEmailForRegistrationInvitation(true);
+        emailJob.MarkEmailForRegistrationInvitation(request.InviteOrgOnwer);
 
         await _userRepository.InsertRegistrationInvitationAsync(email, token, expiresOn, true, cancellationToken);
         await _emailJobRepository.InsertEmailJobAsync(emailJob, cancellationToken);
 
         await _unitOfWork.CommitChangesAsync();
 
-        //TODO Publish to event...
         return true;
     }
 }

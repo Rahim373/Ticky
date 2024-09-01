@@ -6,6 +6,7 @@ import { TokenResponse, User } from '../core/models/tokenResponse';
 import { ErrorResponse } from '../core/models/errorResponse';
 import { Router } from '@angular/router';
 import { RoleEnum } from '../core/models/role';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +18,26 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
-  login(request: LoginRequest): void {
-    this.httpClient.post<TokenResponse | ErrorResponse>(ApiRoutes.Auth.Token, request).
-      subscribe((response: any) => {
-        if (response.accessToken) {
-          const token = response as TokenResponse;
-          this.storeToken(token);
-          this._authenticatedUser = token.user;
-          this.router.navigate(["app"]);
-        }
-      });
+  /**
+   * Get auth token from server
+   * @param request username and password
+   * @returns returns nothing. Ig the token is successfully retrived, the user is logged in to the app
+   */
+  async login(request: LoginRequest): Promise<boolean> {
+    try {
+      var response = await this.getAuthToken(request);
+      if ("accessToken" in response) {
+        const token = response as TokenResponse;
+        this.storeToken(token);
+        this._authenticatedUser = token.user;
+        this.router.navigate(["app"]);
+        return true;
+      }
+      return false;
+    }
+    catch (err) {
+      return false;
+    }
   }
 
   getAccessToken(): string | null {
@@ -41,6 +52,7 @@ export class AuthService {
 
   logout() {
     this.removeToken();
+    this.router.navigate(['login']);
   }
 
   getUserRoles(): RoleEnum[] | null {
@@ -56,14 +68,31 @@ export class AuthService {
     return this._authenticatedUser.roles;
   }
 
-  isGranted(role: RoleEnum) : boolean {
+  isGranted(role: RoleEnum): boolean {
     return this.getUserRoles()?.includes(role) || false;
   }
 
+  /**
+   * 
+   * @param request Gets auth token from server
+   * @returns Return auth information
+   */
+  private getAuthToken(request: LoginRequest) {
+    return lastValueFrom(this.httpClient.post<TokenResponse | ErrorResponse>(ApiRoutes.Auth.Token, request));
+  }
+
+  /**
+   * Saves auth token into local storage
+   * @param token 
+   */
   private storeToken(token: TokenResponse) {
     localStorage.setItem(this.Token_Key, JSON.stringify(token));
   }
 
+  /**
+   * Retrives token from localstorage
+   * @returns Returns token information
+   */
   private retrieveToken(): TokenResponse | null {
     const tokenString: string | null = localStorage.getItem(this.Token_Key);
     try {
@@ -82,6 +111,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * Removes token from localstorage
+   */
   private removeToken(): void {
     localStorage.clear();
     this.router.navigate(['login']);

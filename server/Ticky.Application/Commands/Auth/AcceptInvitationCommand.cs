@@ -2,11 +2,12 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Ticky.Application.Common.Interfaces;
+using Ticky.Domain.Constants;
 using Ticky.Domain.Entities;
 
 namespace Ticky.Application.Commands.Auth;
 
-public record AcceptInvitationCommand(string Token) : ITickyRequest<bool>;
+public record AcceptInvitationCommand(string Token, string Email, string Password, string ConfirmPassword) : ITickyRequest<bool>;
 
 public class AcceptInvitationCommandValidator : AbstractValidator<AcceptInvitationCommand>
 {
@@ -16,6 +17,16 @@ public class AcceptInvitationCommandValidator : AbstractValidator<AcceptInvitati
             .NotEmpty()
             .NotNull()
             .Length(64);
+
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .NotNull()
+            .EmailAddress();
+
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .NotNull()
+            .Equal(x => x.ConfirmPassword);
     }
 }
 
@@ -23,12 +34,19 @@ public class AcceptInvitationCommandHandler : ITickyRequestHandler<AcceptInvitat
 {
     private readonly IUserRepository _userRepository;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IOrganizationRepository _organizationRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AcceptInvitationCommandHandler(IUserRepository userRepository,
-        UserManager<ApplicationUser> userManager)
+    public AcceptInvitationCommandHandler(
+        IUserRepository userRepository,
+        UserManager<ApplicationUser> userManager,
+        IOrganizationRepository organizationRepository,
+        IUnitOfWork unitOfWork)
     {
-        this._userRepository = userRepository;
-        this._userManager = userManager;
+        _userRepository = userRepository;
+        _userManager = userManager;
+        _organizationRepository = organizationRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<bool>> Handle(AcceptInvitationCommand request, CancellationToken cancellationToken)
@@ -45,10 +63,32 @@ public class AcceptInvitationCommandHandler : ITickyRequestHandler<AcceptInvitat
         if (invitation.IsUsed)
             return Error.Validation(description: "Token is already used.");
 
+        if (!invitation.Email.Equals(request.Email.ToLower()))
+            return Error.Validation(description: "This is not a valid token for this email. Please use valid email.");
+
         var existingUser = await _userRepository.GetUserByEmailAsync(invitation.Email, cancellationToken);
 
         if (existingUser is not null)
-            return Error.Forbidden(description: "You already registered. Please login to explore Ticky.");
+        {
+            if (!invitation.OrganizationInvite)
+            {
+                return Error.Forbidden(description: "You are already registered. Please login to explore Ticky.");
+            }
+
+            var organization = await _organizationRepository.GetOrganizationByEmailAsync(invitation.Email, cancellationToken);
+
+            if (organization is not null)
+            {
+                return Error.Unexpected("You already own an organization.");
+            }
+
+            existingUser.PendingOrgCreation = true;
+            await _userRepository.UpdateUserAsync(existingUser.Id,
+                x => x.SetProperty(y => y.PendingOrgCreation, true), cancellationToken);
+
+            await _unitOfWork.CommitChangesAsync();
+            return true;
+        }
 
         var applicationUser = new ApplicationUser
         {
@@ -65,7 +105,9 @@ public class AcceptInvitationCommandHandler : ITickyRequestHandler<AcceptInvitat
         if (!createResult.Succeeded)
             return Error.Validation(description: "User cannot be created.");
 
-        await _userRepository.ChangeInvitationUsedStatusAsync(true, cancellationToken);
+        await _userManager.AddToRolesAsync(applicationUser, [Role.ORG_OWNER, Role.USER]);
+
+        await _userRepository.ChangeInvitationUsedStatusAsync(invitation.Id, true, cancellationToken);
 
         return true;
     }

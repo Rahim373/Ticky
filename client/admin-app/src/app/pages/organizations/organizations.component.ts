@@ -4,11 +4,14 @@ import { Organization } from '../../core/models/organization.interfaces';
 import { CollectionResponse } from '../../core/models/collection.interaces';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { DatePipe } from '@angular/common';
+import { ContainerHeaderComponent } from '../../components/layout/container-header';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { InvitationModalComponent } from '../../components/shared/invitation-modal/invitation-modal.component';
 
 @Component({
   selector: 'app-organizations',
   standalone: true,
-  imports: [NzTableModule, DatePipe],
+  imports: [NzTableModule, DatePipe, ContainerHeaderComponent, NzButtonComponent, InvitationModalComponent ],
   templateUrl: './organizations.component.html'
 })
 export class OrganizationsComponent {
@@ -24,24 +27,19 @@ export class OrganizationsComponent {
     this.loadData(this.pageSize, this.pageNumber);
   }
 
-  loadData(pageSize: number, pageNumber: number) {
+  async loadData(pageSize: number, pageNumber: number) {
     this.loading = true;
-    this.orgService.getOrganizationList({ pageNumber: pageNumber, pageSize: pageSize })
-      .subscribe({
-        next: (response:any) => {
-          this.loading = false;
-          if (!response.errors) {
-            var res = response as CollectionResponse<Organization>;
-            this.total = res.total;
-            this.pageNumber = res.pageNumber;
-            this.pageSize = res.pageSize;
-            this.organizations = res.items;
-          }
-        },
-        error: (err) => {
-          this.loading = false;
-        }
-      });
+    let  response = await this.orgService.getOrganizationList({ pageNumber: pageNumber, pageSize: pageSize });
+
+    if (!("errors" in response)) {
+      var res = response as CollectionResponse<Organization>;
+      this.total = res.total;
+      this.pageNumber = res.pageNumber;
+      this.pageSize = res.pageSize;
+      this.organizations = res.items;
+    }
+    
+    this.loading = false;
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {

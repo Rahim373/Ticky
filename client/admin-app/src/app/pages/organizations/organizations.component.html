@@ -1,3 +1,9 @@
+<app-container-header [title]="'Organizations'"></app-container-header>
+<app-invitation-modal class="float-right mb-2" 
+  [btnName]="'Invite as Org owner'" 
+  [modalTitle]="'Invite user as organization owner'"
+  [inviteAsOrgOwner]="true"
+  ></app-invitation-modal>
 <nz-table
       nzShowSizeChanger
       [nzData]="organizations"
